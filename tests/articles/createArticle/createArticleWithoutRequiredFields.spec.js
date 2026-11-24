@@ -13,7 +13,7 @@ async function assertLocalArticleCreationError({ page, createArticlePage }) {
   const [response] = await Promise.all([
     page.waitForResponse(
       response =>
-        new URL(response.url()).pathname === '/articles' &&
+        new URL(response.url()).pathname.endsWith('/articles') &&
         response.request().method() === 'POST',
     ),
     createArticlePage.clickPublishArticleButton(),
@@ -35,7 +35,6 @@ async function assertLocalArticleCreationError({ page, createArticlePage }) {
 
 async function assertStagingArticleCreationError({ createArticlePage }) {
   await createArticlePage.clickPublishArticleButton();
-
   await createArticlePage.assertErrorMessageContainsText(TITLE_CANNOT_BE_EMPTY);
 }
 
@@ -50,8 +49,5 @@ test('Create an article without required fields', async ({
 }) => {
   await internalHomePage.header.clickNewArticleLink();
 
-  await assertArticleCreationError({
-    page,
-    createArticlePage,
-  });
+  await assertArticleCreationError({ page, createArticlePage });
 });

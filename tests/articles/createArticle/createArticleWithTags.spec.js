@@ -15,7 +15,7 @@ async function publishLocalArticle({ page, createArticlePage, article }) {
   const [response] = await Promise.all([
     page.waitForResponse(
       response =>
-        new URL(response.url()).pathname === '/articles' &&
+        new URL(response.url()).pathname.endsWith('/articles') &&
         response.request().method() === 'POST',
     ),
     createArticlePage.clickPublishArticleButton(),
