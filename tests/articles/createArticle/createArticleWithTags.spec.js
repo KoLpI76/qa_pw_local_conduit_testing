@@ -12,10 +12,12 @@ const testParameters = [
 ];
 
 async function publishLocalArticle({ page, createArticlePage, article }) {
+  const articlesUrl = new URL('/articles', process.env.BASE_URL).href;
+
   const [response] = await Promise.all([
     page.waitForResponse(
       response =>
-        new URL(response.url()).pathname.endsWith('/articles') &&
+        response.url() === articlesUrl &&
         response.request().method() === 'POST',
     ),
     createArticlePage.clickPublishArticleButton(),
